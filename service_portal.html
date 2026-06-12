@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>জান্নাত কম্পিউটার সার্ভিস</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans Bengali for proper Bangla rendering -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Bengali"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#8b5cf6', // Violet 500
+                        secondary: '#db2777', // Pink 600
+                        accent: '#3b82f6', // Blue 500
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc; /* Slate 50 */
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        
+        /* Smooth transitions for the views */
+        .view-transition {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        
+        .hidden-view {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            visibility: hidden;
+        }
+        
+        .active-view {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+            visibility: visible;
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-500 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3 md:gap-4 cursor-pointer" onclick="showHome()">
+                <div class="bg-white/20 backdrop-blur-md text-white p-2.5 md:p-3 rounded-xl shadow-inner border border-white/30">
+                    <i class="fa-solid fa-computer text-2xl md:text-3xl drop-shadow-md"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight drop-shadow-md">জান্নাত <span class="text-yellow-300">কম্পিউটার</span></h1>
+                    <p class="text-xs md:text-sm font-medium text-white/90 tracking-wide mt-0.5">আপনার বিশ্বস্ত ডিজিটাল সেবা কেন্দ্র</p>
+                </div>
+            </div>
+            <div>
+                <button onclick="showHome()" class="text-white hover:text-yellow-200 hover:bg-white/10 px-3 md:px-4 py-2 rounded-lg transition-all flex items-center gap-2 font-bold border border-transparent hover:border-white/20" id="homeBtn" style="display: none;">
+                    <i class="fa-solid fa-house"></i> <span class="hidden md:inline">হোম</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 w-full">
+        
+        <!-- View 1: Dashboard (Grid of Services) -->
+        <div id="dashboardView" class="view-transition active-view">
+            <div class="text-center mb-8 md:mb-12 bg-white/80 backdrop-blur-sm p-6 md:p-10 rounded-3xl shadow-sm border border-gray-100">
+                <h2 class="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-pink-600 mb-3 md:mb-4">সকল ডিজিটাল সেবা এখন হাতের মুঠোয়!</h2>
+                <p class="text-gray-600 md:text-lg max-w-2xl mx-auto font-medium">নিচের তালিকা থেকে আপনার প্রয়োজনীয় সেবার ওপর ক্লিক করে প্রয়োজনীয় ডকুমেন্টের তালিকা এবং আবেদনের লিংক সংগ্রহ করুন।</p>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6" id="servicesGrid">
+                <!-- Cards will be injected here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- View 2: Service Details -->
+        <div id="detailsView" class="view-transition hidden-view bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl p-5 md:p-10 border border-gray-100">
+            <!-- Back Button -->
+            <button onclick="showHome()" class="mb-6 md:mb-8 inline-flex items-center gap-2 text-sm md:text-base font-bold text-violet-600 hover:text-white transition-all bg-violet-50 hover:bg-violet-600 px-5 py-2.5 rounded-full border border-violet-100 hover:border-violet-600 hover:shadow-md">
+                <i class="fa-solid fa-arrow-left"></i> সার্ভিসের তালিকায় ফিরে যান
+            </button>
+
+            <!-- Details Header -->
+            <div class="flex flex-col md:flex-row md:items-center gap-5 md:gap-8 mb-8 pb-8 border-b border-gray-100">
+                <div id="detailIcon" class="w-20 h-20 md:w-24 md:h-24 rounded-3xl flex items-center justify-center text-4xl md:text-5xl text-white shadow-xl flex-shrink-0">
+                    <!-- Icon injected via JS -->
+                </div>
+                <div>
+                    <h2 id="detailTitle" class="text-2xl md:text-4xl font-extrabold text-gray-900 mb-2 md:mb-3">সেবার নাম</h2>
+                    <p id="detailDesc" class="text-gray-500 text-base md:text-xl font-medium">সেবার সংক্ষিপ্ত বিবরণ</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
+                <!-- Checklist Section -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-5 flex items-center gap-3">
+                        <i class="fa-solid fa-list-check text-violet-500"></i> প্রয়োজনীয় ডকুমেন্টের চেকলিস্ট
+                    </h3>
+                    <div class="bg-gray-50/50 rounded-2xl p-2 md:p-4">
+                        <ul id="documentList" class="space-y-3 md:space-y-4">
+                            <!-- Checklist items injected via JS -->
+                        </ul>
+                    </div>
+                    
+                    <div id="extraInfoContainer" class="mt-6 hidden">
+                         <div class="bg-blue-50 text-blue-800 rounded-xl p-4 md:p-5 border border-blue-100 text-sm md:text-base flex gap-3 shadow-sm font-medium">
+                             <i class="fa-solid fa-circle-info mt-1 flex-shrink-0 text-blue-500 text-lg"></i>
+                             <p id="extraInfoText"></p>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="lg:col-span-1">
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-5 flex items-center gap-3">
+                        <i class="fa-solid fa-link text-pink-500"></i> প্রয়োজনীয় লিংক
+                    </h3>
+                    <div id="linksContainer" class="space-y-4">
+                        <!-- Links injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/90 backdrop-blur-md border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-semibold text-gray-500">
+            <p>&copy; ২০২৬ <span class="text-violet-600 font-bold">জান্নাত কম্পিউটার সার্ভিস</span>। সর্বস্বত্ব সংরক্ষিত।</p>
+            <p class="flex items-center gap-2"><i class="fa-solid fa-heart text-pink-500"></i> বিশ্বস্ত ও দ্রুত সেবার প্রতিশ্রুতি</p>
+        </div>
+    </footer>
+
+    <script>
+        // Database of services
+        const servicesData = [
+            {
+                id: 'nu-services',
+                title: 'জাতীয় বিশ্ববিদ্যালয় সেবা',
+                desc: 'একাডেমিক ট্রান্সক্রিপ্ট, সার্টিফিকেট, মার্কশীট, রেজি কার্ড, নাম সংশোধন, মাইগ্রেশন',
+                icon: 'fa-graduation-cap',
+                color: 'bg-emerald-500',
+                documents: [
+                    'সংশ্লিষ্ট কলেজের অধ্যক্ষের সুপারিশসহ আবেদনপত্র (প্রযোজ্য ক্ষেত্রে)',
+                    'রেজিস্ট্রেশন কার্ডের ফটোকপি (সত্যায়িত)',
+                    'প্রবেশপত্রের ফটোকপি (সত্যায়িত)',
+                    'পূর্ববর্তী পরীক্ষার মার্কশীট/সনদের ফটোকপি',
+                    'নাম সংশোধনের ক্ষেত্রে: এসএসসি/সমমান পাসের সনদের সত্যায়িত কপি',
+                    'মাইগ্রেশনের ক্ষেত্রে: মাইগ্রেশন ফি জমার রশিদ ও ছাড়পত্র',
+                    'নির্ধারিত ফি জমার ব্যাংক ড্রাফট/পে-স্লিপ'
+                ],
+                extraInfo: 'জাতীয় বিশ্ববিদ্যালয়ের স্টুডেন্ট পোর্টালে লগইন করে অনলাইনে আবেদন করতে হবে এবং ফি জমা দিতে হবে। এরপর প্রয়োজনীয় কাগজপত্র সংশ্লিষ্ট দপ্তরে পাঠাতে হতে পারে।',
+                links: [
+                    { name: 'NU স্টুডেন্ট পোর্টাল', url: 'http://103.113.200.68/nu-app/', primary: true },
+                    { name: 'জাতীয় বিশ্ববিদ্যালয় ওয়েবসাইট', url: 'https://www.nu.ac.bd/', primary: false }
+                ]
+            },
+            {
+                id: 'nu-admission',
+                title: 'ভর্তির আবেদন (NU)',
+                desc: 'অনার্স, ডিগ্রি ও মাস্টার্স কোর্সে ভর্তির আবেদন',
+                icon: 'fa-user-graduate',
+                color: 'bg-teal-600',
+                documents: [
+                    'এসএসসি (SSC) ও এইচএসসি (HSC) পরীক্ষার রোল ও রেজিস্ট্রেশন নম্বর',
+                    'পাস করার সাল ও বোর্ডের নাম',
+                    'সদ্য তোলা পাসপোর্ট সাইজের রঙিন ছবি (নির্দিষ্ট সাইজ ও ফরম্যাটে)',
+                    'সক্রিয় মোবাইল নম্বর (যেটিতে এসএমএস আসবে)',
+                    'কোটা থাকলে কোটার সপক্ষে প্রমাণপত্র/সনদ',
+                    'ভর্তি ফি জমার প্রমাণপত্র (মোবাইল ব্যাংকিং/ব্যাংকের মাধ্যমে)'
+                ],
+                links: [
+                    { name: 'ভর্তি বিষয়ক ওয়েবসাইট', url: 'http://app11.nu.edu.bd/', primary: true }
+                ]
+            },
+            {
+                id: 'tin-cert',
+                title: 'TIN সার্টিফিকেট',
+                desc: 'নতুন ই-টিন (e-TIN) রেজিস্ট্রেশন',
+                icon: 'fa-file-invoice-dollar',
+                color: 'bg-green-600',
+                documents: [
+                    'জাতীয় পরিচয়পত্র (NID) নম্বর',
+                    'নিজের নামে নিবন্ধিত একটি সচল মোবাইল নম্বর',
+                    'পিতা ও মাতার নাম (NID অনুযায়ী)',
+                    'বর্তমান ও স্থায়ী ঠিকানা',
+                    'কোম্পানির ক্ষেত্রে: ট্রেড লাইসেন্স ও কোম্পানির ইনকর্পোরেশন নম্বর (প্রযোজ্য ক্ষেত্রে)'
+                ],
+                extraInfo: 'NID ডাটাবেসের সাথে তথ্য যাচাই করা হবে। তাই মোবাইল নম্বরটি অবশ্যই আবেদনকারীর NID দিয়ে নিবন্ধিত হতে হবে।',
+                links: [
+                    { name: 'e-TIN পোর্টাল', url: 'https://secure.incometax.gov.bd/TINHome', primary: true }
+                ]
+            },
+            {
+                id: 'ereturn',
+                title: 'ই-রিটার্ন (eReturn)',
+                desc: 'আয়কর রিটার্ন অনলাইনে দাখিল',
+                icon: 'fa-file-signature',
+                color: 'bg-blue-600',
+                documents: [
+                    'ই-টিন (e-TIN) নম্বর ও পাসওয়ার্ড',
+                    'আর্থিক বছরের আয়-ব্যয়ের হিসাব',
+                    'ব্যাংক স্টেটমেন্ট বা ব্যাংক ব্যালান্সের প্রমাণপত্র',
+                    'বেতনভুক্ত হলে: স্যালারি সার্টিফিকেট',
+                    'বিনিয়োগ থাকলে: সঞ্চয়পত্র, ডিপিএস বা শেয়ার বাজারের প্রমাণপত্র',
+                    'সম্পদের বিবরণী (যদি প্রযোজ্য হয়)'
+                ],
+                links: [
+                    { name: 'eReturn পোর্টাল', url: 'https://etaxnbr.gov.bd/#/landing-page', primary: true }
+                ]
+            },
+            {
+                id: 'police-clearance',
+                title: 'পুলিশ ক্লিয়ারেন্স',
+                desc: 'পুলিশ ক্লিয়ারেন্স সার্টিফিকেটের জন্য আবেদন',
+                icon: 'fa-shield-halved',
+                color: 'bg-indigo-600',
+                documents: [
+                    'পাসপোর্টের তথ্য পাতার স্ক্যান কপি (১ম শ্রেণীর গেজেটেড কর্মকর্তা দ্বারা সত্যায়িত)',
+                    'মেয়াদ উত্তীর্ণ পাসপোর্ট হলে: নবায়নের প্রমাণপত্র বা নতুন পাসপোর্ট',
+                    'জাতীয় পরিচয়পত্র (NID) বা জন্ম নিবন্ধন সনদের কপি',
+                    'বর্তমান ঠিকানার প্রমাণ (বিদ্যুৎ বিল/পানির বিল/চেয়ারম্যানের সনদ)',
+                    'নির্ধারিত ফি (৫০০ টাকা) ট্রেজারি চালানের মাধ্যমে জমার কপি বা অনলাইনে পেমেন্ট স্লিপ'
+                ],
+                extraInfo: 'পাসপোর্টে উল্লেখিত স্থায়ী বা বর্তমান ঠিকানার যে কোন একটি ঠিকানার সংশ্লিষ্ট থানা থেকে পুলিশ ক্লিয়ারেন্স প্রদান করা হয়।',
+                links: [
+                    { name: 'পুলিশ ক্লিয়ারেন্স পোর্টাল', url: 'https://pcc.police.gov.bd/ords/r/pcc/pcc/home', primary: true }
+                ]
+            },
+            {
+                id: 'epassport',
+                title: 'ই-পাসপোর্ট',
+                desc: 'নতুন ই-পাসপোর্ট বা রিনিউ আবেদন',
+                icon: 'fa-passport',
+                color: 'bg-cyan-600',
+                documents: [
+                    'অনলাইনে পূরণকৃত আবেদনপত্রের প্রিন্ট কপি',
+                    'পেমেন্ট স্লিপ বা চালান রশিদের কপি',
+                    'জাতীয় পরিচয়পত্র (NID) বা অনলাইন জন্ম নিবন্ধন সনদের (BRC) মূল কপি',
+                    'পূর্বের পাসপোর্ট এবং এর ডাটা পেজের কপি (যদি থাকে)',
+                    'নাগরিকত্ব সনদ (প্রযোজ্য ক্ষেত্রে)',
+                    'সরকারি চাকুরীজীবীদের ক্ষেত্রে: GO/NOC'
+                ],
+                extraInfo: '২০ বছরের বেশি বয়সীদের ক্ষেত্রে জাতীয় পরিচয়পত্র (NID) বাধ্যতামূলক।',
+                links: [
+                    { name: 'e-Passport পোর্টাল', url: 'https://www.epassport.gov.bd/landing', primary: true }
+                ]
+            },
+            {
+                id: 'driving-license',
+                title: 'ড্রাইভিং লাইসেন্স',
+                desc: 'লার্নার ও স্মার্ট কার্ড ড্রাইভিং লাইসেন্সের আবেদন',
+                icon: 'fa-id-card',
+                color: 'bg-orange-500',
+                documents: [
+                    'জাতীয় পরিচয়পত্রের (NID) স্ক্যান কপি',
+                    'মেডিকেল সার্টিফিকেট (নির্ধারিত ফর্মে রেজিস্টার্ড ডাক্তার কর্তৃক স্বাক্ষরিত)',
+                    'শিক্ষাগত যোগ্যতার সনদ (ন্যূনতম ৮ম শ্রেণী পাস)',
+                    'সদ্য তোলা পাসপোর্ট সাইজ ছবি',
+                    'বিদ্যুৎ বিল/গ্যাস বিলের কপি (বর্তমান ঠিকানার প্রমাণস্বরূপ)',
+                    'নির্ধারিত ফি জমার রশিদ'
+                ],
+                links: [
+                    { name: 'BRTA সেবা পোর্টাল (BSP)', url: 'https://bsp.brta.gov.bd/', primary: true }
+                ]
+            },
+            {
+                id: 'driving-test',
+                title: 'ড্রাইভিং টেস্ট রেজাল্ট',
+                desc: 'ড্রাইভিং দক্ষতা যাচাই পরীক্ষার ফলাফল',
+                icon: 'fa-spell-check',
+                color: 'bg-rose-500',
+                documents: [
+                    'লার্নার ড্রাইভিং লাইসেন্স নম্বর',
+                    'অথবা, রেফারেন্স নম্বর',
+                    'পরীক্ষার তারিখের তথ্য'
+                ],
+                extraInfo: 'পরীক্ষা দেওয়ার সাধারণত কয়েকদিনের মধ্যেই অনলাইনে ফলাফল আপডেট করা হয়।',
+                links: [
+                    { name: 'ফলাফল চেক করুন', url: 'https://bsp.brta.gov.bd/dctbResult;jsessionid=1868811F92A5F5ECDCC18E7DD3CBBBC8.server9', primary: true },
+                    { name: 'BSP হোম', url: 'https://bsp.brta.gov.bd/', primary: false }
+                ]
+            },
+            {
+                id: 'bsp-portal',
+                title: 'বিএসপি (BSP)',
+                desc: 'BRTA Service Portal - মোটরযান সেবা',
+                icon: 'fa-car',
+                color: 'bg-purple-600',
+                documents: [
+                    'বিএসপি পোর্টালে রেজিস্ট্রেশনের জন্য NID নম্বর',
+                    'সক্রিয় মোবাইল নম্বর',
+                    'মোটরযান নিবন্ধনের ক্ষেত্রে: গাড়ির প্রয়োজনীয় কাগজপত্র (ইমপোর্ট ডকুমেন্ট, সেলস রিসিট ইত্যাদি)',
+                    'মালিকানা বদলির ক্ষেত্রে: টিটিও ফর্ম, ক্রেতা-বিক্রেতার NID, স্ট্যাম্প'
+                ],
+                links: [
+                    { name: 'BSP পোর্টাল', url: 'https://bsp.brta.gov.bd/', primary: true }
+                ]
+            },
+            {
+                id: 'bmet-reg',
+                title: 'বিএমইটি রেজিস্ট্রেশন',
+                desc: 'প্রবাসী কর্মীদের জন্য আমি প্রবাসী/বিএমইটি ডাটাবেজে নিবন্ধন',
+                icon: 'fa-plane-departure',
+                color: 'bg-amber-500',
+                documents: [
+                    'পাসপোর্টের স্ক্যান কপি (নূন্যতম ৬ মাস মেয়াদ থাকতে হবে)',
+                    'জাতীয় পরিচয়পত্র (NID) বা জন্ম নিবন্ধন সনদ',
+                    'সদ্য তোলা পাসপোর্ট সাইজের রঙিন ছবি',
+                    'ভিসা বা ওয়ার্ক পারমিটের কপি (প্রযোজ্য ক্ষেত্রে)',
+                    'সক্রিয় মোবাইল নম্বর (যেটিতে ওটিপি/OTP আসবে)',
+                    'কারিগরি বা সাধারণ প্রশিক্ষণ সনদ (যদি থাকে)'
+                ],
+                extraInfo: 'বর্তমানে বিএমইটি রেজিস্ট্রেশন এবং ক্লিয়ারেন্স "আমি প্রবাসী" (Ami Probashi) অ্যাপ বা ওয়েবসাইটের মাধ্যমে খুব সহজেই সম্পন্ন করা যায়।',
+                links: [
+                    { name: 'আমি প্রবাসী (Ami Probashi)', url: 'https://www.amiprobashi.com/', primary: true },
+                    { name: 'বিএমইটি (BMET) অফিসিয়াল ওয়েবসাইট', url: 'http://www.bmet.gov.bd/', primary: false }
+                ]
+            }
+        ];
+
+        // DOM Elements
+        const servicesGrid = document.getElementById('servicesGrid');
+        const dashboardView = document.getElementById('dashboardView');
+        const detailsView = document.getElementById('detailsView');
+        const homeBtn = document.getElementById('homeBtn');
+
+        // Render Services Grid
+        function renderServices() {
+            servicesGrid.innerHTML = '';
+            servicesData.forEach(service => {
+                // Determine gradient colors dynamically
+                let gradientClass = '';
+                let shadowClass = '';
+                if(service.color.includes('emerald')) { gradientClass = 'bg-gradient-to-br from-emerald-400 to-emerald-600'; shadowClass = 'shadow-emerald-500/30'; }
+                else if(service.color.includes('teal')) { gradientClass = 'bg-gradient-to-br from-teal-400 to-teal-600'; shadowClass = 'shadow-teal-500/30'; }
+                else if(service.color.includes('green')) { gradientClass = 'bg-gradient-to-br from-green-400 to-green-600'; shadowClass = 'shadow-green-500/30'; }
+                else if(service.color.includes('blue')) { gradientClass = 'bg-gradient-to-br from-blue-400 to-blue-600'; shadowClass = 'shadow-blue-500/30'; }
+                else if(service.color.includes('indigo')) { gradientClass = 'bg-gradient-to-br from-indigo-400 to-indigo-600'; shadowClass = 'shadow-indigo-500/30'; }
+                else if(service.color.includes('cyan')) { gradientClass = 'bg-gradient-to-br from-cyan-400 to-cyan-600'; shadowClass = 'shadow-cyan-500/30'; }
+                else if(service.color.includes('orange')) { gradientClass = 'bg-gradient-to-br from-orange-400 to-orange-600'; shadowClass = 'shadow-orange-500/30'; }
+                else if(service.color.includes('rose')) { gradientClass = 'bg-gradient-to-br from-rose-400 to-rose-600'; shadowClass = 'shadow-rose-500/30'; }
+                else if(service.color.includes('purple')) { gradientClass = 'bg-gradient-to-br from-purple-400 to-purple-600'; shadowClass = 'shadow-purple-500/30'; }
+                else if(service.color.includes('amber')) { gradientClass = 'bg-gradient-to-br from-amber-400 to-amber-600'; shadowClass = 'shadow-amber-500/30'; }
+                else { gradientClass = 'bg-gradient-to-br from-gray-400 to-gray-600'; shadowClass = 'shadow-gray-500/30'; }
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-5 md:p-6 border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 group flex flex-col h-full relative overflow-hidden';
+                card.onclick = () => showDetails(service.id);
+                
+                card.innerHTML = `
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${gradientClass.replace('bg-gradient-to-br', '')} opacity-10 rounded-bl-full -z-10 group-hover:scale-125 transition-transform duration-500"></div>
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl ${gradientClass} ${shadowClass} shadow-lg text-white flex items-center justify-center text-2xl md:text-3xl mb-5 group-hover:rotate-12 transition-transform duration-300">
+                        <i class="fa-solid ${service.icon}"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-extrabold text-gray-800 mb-2 group-hover:text-violet-700 transition-colors">${service.title}</h3>
+                    <p class="text-gray-500 text-sm md:text-base flex-grow leading-relaxed font-medium">${service.desc}</p>
+                    <div class="mt-5 flex items-center text-violet-700 text-sm md:text-base font-bold bg-violet-50 w-fit px-4 py-2 rounded-xl opacity-90 group-hover:opacity-100 transition-all duration-300 group-hover:bg-violet-100 group-hover:shadow-sm">
+                        বিস্তারিত দেখুন <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                `;
+                servicesGrid.appendChild(card);
+            });
+        }
+
+        // Navigation Functions
+        function showHome() {
+            detailsView.classList.remove('active-view');
+            detailsView.classList.add('hidden-view');
+            
+            setTimeout(() => {
+                dashboardView.classList.remove('hidden-view');
+                dashboardView.classList.add('active-view');
+                homeBtn.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 50); // slight delay to allow opacity transition
+        }
+
+        function showDetails(serviceId) {
+            const service = servicesData.find(s => s.id === serviceId);
+            if (!service) return;
+
+            // Determine gradient colors dynamically
+            let gradientClass = '';
+            if(service.color.includes('emerald')) { gradientClass = 'bg-gradient-to-br from-emerald-400 to-emerald-600'; }
+            else if(service.color.includes('teal')) { gradientClass = 'bg-gradient-to-br from-teal-400 to-teal-600'; }
+            else if(service.color.includes('green')) { gradientClass = 'bg-gradient-to-br from-green-400 to-green-600'; }
+            else if(service.color.includes('blue')) { gradientClass = 'bg-gradient-to-br from-blue-400 to-blue-600'; }
+            else if(service.color.includes('indigo')) { gradientClass = 'bg-gradient-to-br from-indigo-400 to-indigo-600'; }
+            else if(service.color.includes('cyan')) { gradientClass = 'bg-gradient-to-br from-cyan-400 to-cyan-600'; }
+            else if(service.color.includes('orange')) { gradientClass = 'bg-gradient-to-br from-orange-400 to-orange-600'; }
+            else if(service.color.includes('rose')) { gradientClass = 'bg-gradient-to-br from-rose-400 to-rose-600'; }
+            else if(service.color.includes('purple')) { gradientClass = 'bg-gradient-to-br from-purple-400 to-purple-600'; }
+            else if(service.color.includes('amber')) { gradientClass = 'bg-gradient-to-br from-amber-400 to-amber-600'; }
+            else { gradientClass = 'bg-gradient-to-br from-gray-400 to-gray-600'; }
+
+            // Populate Details
+            const iconEl = document.getElementById('detailIcon');
+            iconEl.className = `w-20 h-20 md:w-24 md:h-24 rounded-3xl flex items-center justify-center text-4xl md:text-5xl text-white shadow-lg flex-shrink-0 ${gradientClass}`;
+            iconEl.innerHTML = `<i class="fa-solid ${service.icon}"></i>`;
+            
+            document.getElementById('detailTitle').textContent = service.title;
+            document.getElementById('detailDesc').textContent = service.desc;
+
+            // Populate Documents
+            const docList = document.getElementById('documentList');
+            docList.innerHTML = '';
+            service.documents.forEach(doc => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-3 md:gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow';
+                li.innerHTML = `
+                    <div class="mt-0.5 text-violet-500 flex-shrink-0 text-xl">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <span class="text-gray-700 leading-relaxed font-semibold md:text-lg">${doc}</span>
+                `;
+                docList.appendChild(li);
+            });
+
+            // Extra Info
+            const extraInfoContainer = document.getElementById('extraInfoContainer');
+            if (service.extraInfo) {
+                document.getElementById('extraInfoText').textContent = service.extraInfo;
+                extraInfoContainer.classList.remove('hidden');
+            } else {
+                extraInfoContainer.classList.add('hidden');
+            }
+
+            // Populate Links
+            const linksContainer = document.getElementById('linksContainer');
+            linksContainer.innerHTML = '';
+            service.links.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                
+                if (link.primary) {
+                    a.className = `flex items-center justify-between w-full ${gradientClass} text-white p-4 md:p-5 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 group`;
+                    a.innerHTML = `
+                        <span class="flex items-center gap-3 text-base md:text-lg">
+                            <i class="fa-solid fa-earth-americas text-xl"></i> ${link.name}
+                        </span>
+                        <div class="bg-white/20 p-2 md:p-2.5 rounded-lg group-hover:bg-white/30 transition-colors">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-sm md:text-base"></i>
+                        </div>
+                    `;
+                } else {
+                    a.className = 'flex items-center justify-between w-full bg-white hover:bg-gray-50 border-2 border-gray-100 text-gray-700 p-4 md:p-5 rounded-2xl font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-1 group';
+                    a.innerHTML = `
+                        <span class="flex items-center gap-3 text-base md:text-lg">
+                            <i class="fa-solid fa-link text-violet-400"></i> ${link.name}
+                        </span>
+                        <div class="bg-gray-100 p-2 md:p-2.5 rounded-lg group-hover:bg-violet-100 group-hover:text-violet-600 transition-colors">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-sm md:text-base"></i>
+                        </div>
+                    `;
+                }
+                linksContainer.appendChild(a);
+            });
+
+            // View Transition
+            dashboardView.classList.remove('active-view');
+            dashboardView.classList.add('hidden-view');
+            
+            setTimeout(() => {
+                detailsView.classList.remove('hidden-view');
+                detailsView.classList.add('active-view');
+                homeBtn.style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 50);
+        }
+
+        // Initialize App
+        window.onload = () => {
+            renderServices();
+        };
+    </script>
+</body>
+</html>
